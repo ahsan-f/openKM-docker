@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Server port="8005" shutdown="SHUTDOWN">
+    <Service name="Catalina">
+        <Engine name="Catalina" defaultHost="localhost">
+            <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
+                <Resource name="jdbc/OpenKM" auth="Container" type="javax.sql.DataSource"
+                          maxActive="100" maxIdle="30" maxWait="10000"
+                          # NOTE: The username/password must match the environment variables in docker-compose.yml
+                          username="openkm_user" password="securepassword" 
+                          driverClassName="org.postgresql.Driver"
+                          url="jdbc:postgresql://db:5432/openkm_db"
+                          validationQuery="SELECT 1"/>
+                </Host>
+        </Engine>
+    </Service>
+</Server>
