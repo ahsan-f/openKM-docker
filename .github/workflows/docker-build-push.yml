@@ -11,7 +11,7 @@ on:
       - 'config/**'
       - '.github/workflows/docker-build-push.yml'
   
-  # 👇 New Addition: Manual Trigger
+  # Manual Trigger
   workflow_dispatch:
     inputs:
       tag:
@@ -39,8 +39,8 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: your-dockerhub-username/openkm-dms  # IMPORTANT: Change to your registry path
-          tags: |
+          images: your-dockerhub-username/openkm-dms  # Line ~60
+          tags: |                                     # Line ~61
             # Tags generated on 'push' event
             type=sha,prefix=,suffix=,format=short
             type=raw,value=latest
