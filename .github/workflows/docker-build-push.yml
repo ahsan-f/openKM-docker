@@ -39,7 +39,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: your-dockerhub-username/openkm-dms  # Line ~60
+          images: ahsand10/openkm-dms  # Line ~60
           tags: |                                     # Line ~61
             # Tags generated on 'push' event
             type=sha,prefix=,suffix=,format=short
