@@ -58,4 +58,4 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: ✅ Verify image push
-        run: echo "Successfully pushed OpenKM image with tags: ${{ steps.meta.outputs.tags }}"
+        run: echo "Successfully pushed OpenKM image with tags:${{ steps.meta.outputs.tags }}"
