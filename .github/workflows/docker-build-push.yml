@@ -10,6 +10,14 @@ on:
       - 'Dockerfile'
       - 'config/**'
       - '.github/workflows/docker-build-push.yml'
+  
+  # 👇 New Addition: Manual Trigger
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Optional: Docker image tag (e.g., v1.0.0). Defaults to latest.'
+        required: false
+        default: 'latest'
 
 jobs:
   build-and-push:
@@ -33,9 +41,12 @@ jobs:
         with:
           images: your-dockerhub-username/openkm-dms  # IMPORTANT: Change to your registry path
           tags: |
+            # Tags generated on 'push' event
             type=sha,prefix=,suffix=,format=short
             type=raw,value=latest
             type=ref,event=branch
+            # Tags generated on 'workflow_dispatch' (manual run)
+            type=raw,value=${{ github.event.inputs.tag }} 
 
       - name: 🔨 Build and push Docker image
         uses: docker/build-push-action@v5
@@ -45,9 +56,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          # Set memory limits if needed, but typically done at container run time
-          # build-args: |
-          #   JAVA_OPTS=-Xmx4096m
 
       - name: ✅ Verify image push
-        run: echo "Successfully pushed OpenKM image to ${{ steps.meta.outputs.tags }}"
+        run: echo "Successfully pushed OpenKM image with tags: ${{ steps.meta.outputs.tags }}"
