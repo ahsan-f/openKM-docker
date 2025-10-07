@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # 1. OpenKM Application Service
+  openkm-app:
+    build: .
+    container_name: openkm-dms
+    image: myorg/openkm-dms:latest  # Replace with your Docker Hub path
+    ports:
+      - "8080:8080"  # Expose the OpenKM Web UI
+    volumes:
+      # Persistent volume for actual binary document files (REQUIRED)
+      - openkm_repository:/opt/tomcat/repository 
+    environment:
+      # Set maximum heap size for Java application
+      - JAVA_OPTS=-Xmx4096m -Xms2048m 
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  # 2. PostgreSQL Database Service
+  db:
+    image: postgres:14-alpine
+    container_name: openkm-db
+    environment:
+      # Database connection details used in OpenKM.cfg and server.xml
+      - POSTGRES_USER=openkm_user
+      - POSTGRES_PASSWORD=securepassword
+      - POSTGRES_DB=openkm_db
+    volumes:
+      # Persistent volume for database metadata (REQUIRED)
+      - openkm_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+# Define persistent volumes
+volumes:
+  openkm_repository:
+    driver: local
+  openkm_db_data:
+    driver: local
